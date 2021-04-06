@@ -215,7 +215,7 @@ void			pw_disassemble(t_ab *ab)
 	{
 		if (ab->a.count == 3)
 			pw_sort_last3_in_a(ab);
-		else if (ab->b.count == 2)
+		else if (ab->a.count == 2)
 		{
 			a_top = a_get(&ab->a, 0);
 			a_second = a_get(&ab->a, 1);
@@ -226,8 +226,6 @@ void			pw_disassemble(t_ab *ab)
 		return ;
 	}
 	pivot = pw_get_pivot(&ab->a);
-	a_top = a_get(&ab->a, 0);
-	a_second = a_get(&ab->a, 1);
 	pw_split_from_pivot(ab, pivot);
 	pw_disassemble(ab);
 }
