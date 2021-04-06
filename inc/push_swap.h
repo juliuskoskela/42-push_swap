@@ -1,6 +1,7 @@
 #ifndef PUSH_SWAP_H
 # define PUSH_SWAP_H
 # include "../array/inc/array.h"
+# include "../string/inc/string.h"
 # include <time.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -12,6 +13,7 @@ typedef struct	s_ab
 	t_arr		a;
 	t_arr		b;
 	t_arr		commands;
+	t_arr		partitions;
 	size_t		stack_size;
 }				t_ab;
 

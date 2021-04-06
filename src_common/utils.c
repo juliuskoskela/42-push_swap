@@ -67,6 +67,7 @@ t_ab			pw_new_ab(size_t size)
 
 	ab.a = a_alloc(1);
 	ab.b = a_alloc(1);
+	ab.partitions = a_alloc(1);
 	ab.commands = a_alloc(1);
 	ab.stack_size = size;
 	return (ab);
@@ -88,10 +89,11 @@ void			pw_print_str(void **data, size_t i)
 {
 	char		*str;
 
+	i++;
 	if (*data == NULL)
 		return ;
 	str = *data;
-	printf("%-3s ", str);
+	printf("%s\n", str);
 }
 
 void			pw_print_int(void **data, size_t i)
@@ -101,7 +103,7 @@ void			pw_print_int(void **data, size_t i)
 	if (*data == NULL)
 		return ;
 	num = *data;
-	printf("%d ", *num);
+	printf("[%zu] %d ", i, *num);
 }
 
 int				pw_cmp(void *a, void *b)
