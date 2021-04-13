@@ -17,74 +17,45 @@
 // word = 64
 // page = 256
 
-int			v_cmp_words(void *src, void *cmp, size_t words)
+static int			v_cmp_words(const void *src, const void *cmp, size_t words)
 {
 
 	const size_t	*src64;
-	size_t			*dst64;
+	const size_t	*dst64;
 
-	src64 = src;
-	dst64 = cmp;
-	while (words--)
+	src64 = (const size_t *)src;
+	dst64 = (const size_t *)cmp;
+    while (words-- && *dst64 == *src64)
 	{
-		if (dst64[words] != src64[words])
-			return (1);
+		dst64++;
+		src64++;
 	}
-	return (0);
+    return (*src64 - *dst64);
 }
 
-int			v_cmp2(void *src, void *cmp, size_t size)
+int					v_cmp2(const void *src, const void *cmp, const size_t size)
 {
 
 	const char		*src8;
-	char			*dst8;
-	size_t			rem;
+	const char		*dst8;
+	size_t			offset;
 	size_t			words;
+	int				ret;
 
-	src8 = src;
-	dst8 = cmp;
-	rem = size % 8;
 	words = size / 8;
-	if (v_cmp_words(src, cmp, words))
-		return (1);
-	while (rem--)
+	offset = size - words * 8;
+	if ((ret = v_cmp_words(src, cmp, words)) > 0)
+		return (ret);
+	src8 = (const char *)src;
+	src8 = &src8[words * 8 - 1];
+	dst8 = (const char *)cmp;
+	dst8 = &dst8[words * 8 - 1];
+	while (offset-- && src8 == dst8)
 	{
-		if (dst8[size - rem] != src8[size - rem])
-			return (1);
+		dst8++;
+		src8++;
 	}
-	return (0);
-}
-
-int			v_cmp1(void *src, void *cmp, size_t size)
-{
-
-	const size_t	*src64;
-	size_t			*dst64;
-	const char		*src8;
-	char			*dst8;
-	size_t			rem;
-	size_t			words;
-	size_t			i;
-
-	rem = size % 8;
-	src64 = src;
-	dst64 = cmp;
-	src8 = src;
-	dst8 = cmp;
-	words = size / 8;
-	while (words--)
-	{
-		if (dst64[words] != src64[words])
-			return (1);
-	}
-	i = size - rem;
-	while (i < size)
-	{
-		if (dst8[i] != src8[i])
-			return (1);
-		i++;
-	}
-	return (0);
+	return (*src8 - *dst8);
 }
 
 void		*memdup(void *src, size_t size)
@@ -94,12 +65,12 @@ void		*memdup(void *src, size_t size)
 	size_t			*dst64;
 	const char		*src8;
 	char			*dst8;
-	size_t			rem;
+	size_t			offset;
 	size_t			bits;
 	size_t			words;
 	size_t			i;
 
-	rem = (8 * size) % 64;
+	offset = (8 * size) % 64;
 	bits = 8 * size;
 	src64 = src;
 	dst64 = out;
@@ -113,7 +84,7 @@ void		*memdup(void *src, size_t size)
 		dst64[i] = src64[i];
 		i++;
 	}
-	i = size - rem / 8;
+	i = size - offset / 8;
 	while (i < size)
 	{
 		dst8[i] = src8[i];
@@ -140,11 +111,11 @@ int			main(void)
 	start = clock();
 	while (iters)
 	{
-		ret = v_cmp2(src, dst, strlen(dst));
+		/*ret = v_cmp2(src, dst, strlen(dst));*/
 		/*ret = v_cmp(src, dst, strlen(dst));*/
-		/*ret = s_cmp(src, dst);*/
+		ret = s_cmp(src, dst);
 		/*ret = memcmp(src, dst, strlen(src));*/
-		if (ret == 1)
+		if (ret != 0)
 			printf("CHAOS");
 		iters--;
 	}

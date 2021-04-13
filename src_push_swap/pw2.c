@@ -237,53 +237,6 @@ void			pw_disassemble(t_ab *ab)
 	pw_disassemble(ab);
 }
 
-t_arr			pw_remove_extra_rotations(t_arr *commands)
-{
-	t_arr		out;
-	size_t		i;
-	int			rotations;
-
-	out = a_alloc(commands->count);
-	rotations = 0;
-	i = 0;
-	while (i < commands->count)
-	{
-		while (s_cmp(a_get(commands, i), "rra") == 0)	
-		{
-			rotations++;
-			i++;
-		}
-		while (rotations > 0 && s_cmp(a_get(commands, i), "ra") == 0)	
-		{
-			rotations--;
-			i++;
-		}
-		while (rotations > 0)
-		{
-			a_add(&out, "rra");
-			rotations--;
-		}
-		/*while (s_cmp(a_get(commands, i), "rb") == 0)	*/
-		/*{*/
-			/*rotations++;*/
-			/*i++;*/
-		/*}*/
-		/*while (rotations > 0 && s_cmp(a_get(commands, i), "ra") == 0)	*/
-		/*{*/
-			/*rotations--;*/
-			/*a_add(&out, "rr");*/
-			/*i++;*/
-		/*}*/
-		/*while (rotations > 0)*/
-		/*{*/
-			/*a_add(&out, "rb");*/
-			/*rotations--;*/
-		/*}*/
-		a_add(&out, a_get(commands, i));
-		i++;
-	}
-	return (out);
-}
 
 int				main(int argc, char **argv)
 {
@@ -296,7 +249,6 @@ int				main(int argc, char **argv)
 	a_readfile(&args, argv[1]);
 	ab = pw_prepaper_ab(args.count, (char **)args.data);
 	pw_disassemble(&ab);
-	t_arr commands = pw_remove_extra_rotations(&ab.commands);
-	a_iter(&commands, pw_print_str);
+	a_iter(&ab.commands, pw_print_str);
 }
 

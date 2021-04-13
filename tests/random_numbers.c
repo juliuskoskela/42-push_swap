@@ -1,4 +1,3 @@
-
 #include "../array/inc/array.h"
 
 void			print(void **data, size_t i)
