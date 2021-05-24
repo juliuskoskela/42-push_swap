@@ -1,14 +1,78 @@
-#include "../inc/push_swap.h"
+# include "../inc/push_swap.h"
+# include <string.h>
+# define PRINT print
 
-static int		check_case(t_arr *arr)
+///////////////////////////////////////////////////////////////////////////////
+
+t_ssize		print_uint64(void *data, t_size i);
+void		pw_print_stacks(t_stacks ab);
+int			pw_conv_command(char *cmd);
+t_ssize		pw_print_nbr(void *data, t_size i);
+int			pw_find_position(t_array a, int n);
+t_array		pw_parse_stack(t_page input);
+t_array		pw_norm_stack(t_array raw);
+t_ssize		free_str(void *data, t_size i);
+t_stacks	pw_new_stack(char *filename);
+void		pw_free_stacks(t_stacks ab);
+t_bool		pw_sorted(t_array src);
+
+///////////////////////////////////////////////////////////////////////////////
+
+static int	check_case(t_array *arr);
+void		pw_sort_last3_in_b(t_stacks *ab);
+void		pw_sort_last3_in_a(t_stacks *ab);
+t_size		pw_get_pivot(t_array *arr);
+void		pw_split_from_pivot(t_stacks *ab, int pivot);
+void		pw_merge_from_pivot(t_stacks *ab, int pivot);
+void		pw_reassemble(t_stacks *ab);
+void		pw_disassemble(t_stacks *ab);
+
+///////////////////////////////////////////////////////////////////////////////
+
+t_bool		pw_sorted(t_array src)
 {
-	int			*v1;
-	int			*v2;
-	int			*v3;
+	t_size	i;
+	int		*f;
+	int		*s;
 
-	v1 = a_get(arr, 0);
-	v2 = a_get(arr, 1);
-	v3 = a_get(arr, 2);
+	i = 1;
+	while (i < src.len)
+	{
+		f = arr_get(&src, i - 1);
+		s = arr_get(&src, i);
+		if (*s <= *f)
+			return (FALSE);
+		i++;
+	}
+	return (TRUE);
+}
+
+int main(int argc, char **argv)
+{
+	t_stacks	ab;
+
+	ab = pw_new_stack(argv[1]);
+	pw_print_stacks(ab);
+	pw_disassemble(&ab);
+	pw_print_stacks(ab);
+	if (pw_sorted(ab.a))
+		print("sorted = yes\n");
+	else
+		print("sorted = no\n");
+	pw_free_stacks(ab);
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+static int	check_case(t_array *arr)
+{
+	int	*v1;
+	int	*v2;
+	int	*v3;
+
+	v1 = arr_get(arr, 0);
+	v2 = arr_get(arr, 1);
+	v3 = arr_get(arr, 2);
 	if (*v1 > *v2 && *v2 > *v3)
 		return (1);
 	else if (*v1 > *v2 && *v2 < *v3 && *v3 > *v1)
@@ -24,139 +88,126 @@ static int		check_case(t_arr *arr)
 	return (0);
 }
 
-void            pw_sort_last3_in_b(t_ab *ab)
+void	pw_sort_last3_in_b(t_stacks *ab)
 {
-    int            case3;
+	int	case3;
 
-    case3 = check_case(&ab->b);
-    if (case3 == 1)
-        return ;
-    else if (case3 == 2)
-        rrb(ab);
-    else if (case3 == 3)
-        rb(ab);
-    else if (case3 == 4)
-    {
-        sb(ab);
-        rb(ab);
-    }
-    else if (case3 == 5)
-        sb(ab);
-    else if (case3 == 6)
-    {
-        sb(ab);
-        rrb(ab);
-    }
+	case3 = check_case(&ab->b);
+	if (case3 == 1)
+		return ;
+	else if (case3 == 2)
+		rrb(ab);
+	else if (case3 == 3)
+		rb(ab);
+	else if (case3 == 4)
+	{
+		sb(ab);
+		rb(ab);
+	}
+	else if (case3 == 5)
+		sb(ab);
+	else if (case3 == 6)
+	{
+		sb(ab);
+		rrb(ab);
+	}
 }
 
-void            pw_sort_last3_in_a(t_ab *ab)
+void	pw_sort_last3_in_a(t_stacks *ab)
 {
-    int            case3;
+	int	case3;
 
-    case3 = check_case(&ab->a);
-    if (case3 == 6)
-        return ;
-    else if (case3 == 5)
-        rra(ab);
-    else if (case3 == 4)
-        ra(ab);
-    else if (case3 == 3)
-    {
-        sa(ab);
-        ra(ab);
-    }
-    else if (case3 == 2)
-        sa(ab);
-    else if (case3 == 1)
-    {
-        sa(ab);
-        rra(ab);
-    }
+	// PRINT("sort 3 a\n");
+	// arr_iter(&ab->a, pw_print_nbr);
+	case3 = check_case(&ab->a);
+	// PRINT("case = %d\n", case3);
+	if (case3 == 6)
+		return ;
+	else if (case3 == 5)
+		rra(ab);
+	else if (case3 == 4)
+		ra(ab);
+	else if (case3 == 3)
+	{
+		sa(ab);
+		ra(ab);
+	}
+	else if (case3 == 2)
+		sa(ab);
+	else if (case3 == 1)
+	{
+		sa(ab);
+		rra(ab);
+	}
 }
 
-size_t			pw_get_pivot(t_arr *arr)
+t_size	pw_get_pivot(t_array *arr)
 {
-	size_t		i;
-	size_t		res;
-	int			*ptr;
+	t_size	i;
+	t_size	res;
+	int		*ptr;
 
 	i = 0;
 	res = 0;
-	while (i < arr->count)
+	while (i < arr->len)
 	{
-		ptr = arr->data[i];
+		ptr = arr_get(arr, i);
 		res += *ptr;
 		i++;
 	}
-	return (res / arr->count);
+	return (res / arr->len);
 }
 
-int				pw_get_direction_in_a(t_ab *ab, int pivot)
+void	pw_split_from_pivot(t_stacks *ab, int pivot)
 {
-	int			i;
-	int			j;
-	int			*a_val_i;
-	int			*a_val_j;
-	
-	i = 0;
-	while (i < (int)ab->a.count)
-	{
-		a_val_i = a_get(&ab->a, i);
-		if (*a_val_i < pivot)
-			break ;
-		i++;
-	}
-	j = ab->a.count - 1;
-	while (j > 0)
-	{
-		a_val_j = a_get(&ab->a, j);
-		if (*a_val_j < pivot)
-			break ;
-		j--;
-	}
-	j = ab->a.count - j;
-	if (i < j)
-		return (1);
-	else
-		return (0);
-}
+	int	*top;
+	int	i;
 
-void			pw_split_from_pivot(t_ab *ab, int pivot)
-{
-	int			*top;
-	int			i;
-
-	i = ab->a.count;
+	// PRINT("split form pivot\n");
+	// arr_iter(&ab->a, pw_print_nbr);
+	// PRINT("\n");
+	i = ab->a.len;
 	while (i--)
 	{
-		top = a_get(&ab->a, 0);
+		top = arr_get(&ab->a, 0);
+		// print("%d\n", *top);
 		if (*top < pivot)
 			pb(ab);
 		else
 			ra(ab);
 	}
+	// PRINT("split form pivot\n");
+	// arr_iter(&ab->a, pw_print_nbr);
+	// PRINT("\n");
 }
 
-void			pw_merge_from_pivot(t_ab *ab, int pivot)
+void	pw_merge_from_pivot(t_stacks *ab, int pivot)
 {
-	int			*a_top;
-	int			*b_top;
-	int			i;
-	int			rotations;
+	int	*a_top;
+	int	*b_top;
+	int	i;
+	int	rotations;
 
 	rotations = 0;
-	i = ab->b.count;
+	i = ab->b.len;
+	// PRINT("merge form pivot\n");
+	// arr_iter(&ab->a, pw_print_nbr);
+	// PRINT("\n");
+	// arr_iter(&ab->b, pw_print_nbr);
+	// PRINT("\n");
 	while (i--)
 	{
-		a_top = a_get(&ab->a, 0);
-		b_top = a_get(&ab->b, 0);
+		a_top = arr_get(&ab->a, 0);
+		b_top = arr_get(&ab->b, 0);
+		// print("%d\n", *a_top);
+		// print("%d\n", *b_top);
 		if (*b_top > pivot)
 		{
 			while (*a_top < *b_top)
 			{
 				ra(ab);
 				rotations++;
-				a_top = a_get(&ab->a, 0);
+				a_top = arr_get(&ab->a, 0);
 			}
 			pa(ab);
 			while (rotations)
@@ -169,56 +220,44 @@ void			pw_merge_from_pivot(t_ab *ab, int pivot)
 			rb(ab);
 	}
 }
-/*
-**	---------------------------------------------------------------------------
-**
-**	Reassemble the values from stack b to stack a.
-**
-*/
-void			pw_reassemble(t_ab *ab)
+
+void	pw_reassemble(t_stacks *ab)
 {
-	int			*b_top;
-	int			*b_second;
-	size_t		pivot;
+	int		*b_top;
+	int		*b_second;
+	t_size	pivot;
 
 	pivot = pw_get_pivot(&ab->b);
 	pw_merge_from_pivot(ab, pivot);
-	if (ab->b.count > 3)
+	if (ab->b.len > 3)
 		pw_reassemble(ab);
-	if (ab->b.count == 3)
+	if (ab->b.len == 3)
 		pw_sort_last3_in_b(ab);
-	else if (ab->b.count == 2)
+	else if (ab->b.len == 2)
 	{
-		b_top = a_get(&ab->b, 0);
-		b_second = a_get(&ab->b, 1);
+		b_top = arr_get(&ab->b, 0);
+		b_second = arr_get(&ab->b, 1);
 		if (*b_top < *b_second)
 			sb(ab);
 	}
-	while (ab->b.count)
+	while (ab->b.len)
 		pa(ab);
 }
-/*
-**	---------------------------------------------------------------------------
-**
-**	Disassemble the values from stack a into stack b by splitting from below
-**	the pivot ie. the median of stack a into stack b. When only 3 values
-**	remain, they are sorted in place.
-**
-*/
-void			pw_disassemble(t_ab *ab)
-{
-	int			*a_top;
-	int			*a_second;
-	int			pivot;
 
-	if (ab->a.count <= 3)
+void	pw_disassemble(t_stacks *ab)
+{
+	int	*a_top;
+	int	*a_second;
+	int	pivot;
+
+	if (ab->a.len <= 3)
 	{
-		if (ab->a.count == 3)
+		if (ab->a.len == 3)
 			pw_sort_last3_in_a(ab);
-		else if (ab->a.count == 2)
+		else if (ab->a.len == 2)
 		{
-			a_top = a_get(&ab->a, 0);
-			a_second = a_get(&ab->a, 1);
+			a_top = arr_get(&ab->a, 0);
+			a_second = arr_get(&ab->a, 1);
 			if (*a_top > *a_second)
 				sb(ab);
 		}
@@ -230,50 +269,138 @@ void			pw_disassemble(t_ab *ab)
 	pw_disassemble(ab);
 }
 
-t_arr			pw_remove_extra_rotations(t_arr *commands)
-{
-	t_arr		out;
-	size_t		i;
-	int			rotations;
+///////////////////////////////////////////////////////////////////////////////
 
-	out = a_alloc(commands->count);
-	rotations = 0;
+t_ssize	print_int(void *data, t_size i)
+{
+	int	*ptr;
+
+	ptr = data;
+	print("%d ", *ptr);
+	return (i);
+}
+
+void	pw_print_stacks(t_stacks ab)
+{
+	print("a: ");
+	arr_iter(&ab.a, print_int);
+	print("\nb: ");
+	arr_iter(&ab.b, print_int);
+	print("\n");
+	print("commands count = %d\n", ab.commands.len);
+}
+
+int	pw_conv_command(char *cmd)
+{
+	t_size	i;
+
 	i = 0;
-	while (i < commands->count)
+	while (i < cmd_count)
 	{
-		while (s_cmp(a_get(commands, i), "rra") == 0)	
-		{
-			rotations++;
-			i++;
-		}
-		while (rotations > 0 && s_cmp(a_get(commands, i), "ra") == 0)	
-		{
-			rotations--;
-			i++;
-		}
-		while (rotations > 0)
-		{
-			a_add(&out, "rra");
-			rotations--;
-		}
-		a_add(&out, a_get(commands, i));
+		if (s_cmp(comid[i], cmd) == 0)
+			return (i);
+	}
+	return (-1);
+}
+
+t_ssize	pw_print_nbr(void *data, t_size i)
+{
+	int	*num;
+
+	if (data == NULL)
+		return (-1);
+	num = data;
+	print("[%llu] %d \n", i, *num);
+	return (i);
+}
+
+int	pw_find_position(t_array a, int n)
+{
+	int	*numptr;
+	t_size		pos;
+	t_size		i;
+
+	i = 0;
+	pos = 0;
+	while (i < a.len)
+	{
+		numptr = arr_get(&a, i);
+		if (*numptr < n)
+			pos++;
+		i++;
+	}
+	return (pos);
+}
+
+t_array	pw_parse_stack(t_page input)
+{
+	t_array	out;
+	int		cur;
+	t_size	i;
+
+	out = arr_new(1, sizeof(int));
+	i = 0;
+	while (i < input.len)
+	{
+		cur = str_toi(page_get(&input, i));
+		arr_add_last(&out, &cur);
 		i++;
 	}
 	return (out);
 }
 
-int				main(int argc, char **argv)
+t_array	pw_norm_stack(t_array raw)
 {
-	t_ab		ab;
-	t_arr		args;
+	t_array	out;
+	int		*n;
+	int		pos;
+	t_size	i;
 
-	if (argc < 0)
-		return (0);
-	args = a_alloc(100);
-	a_readfile(&args, argv[1]);
-	ab = pw_prepaper_ab(args.count, (char **)args.data);
-	pw_disassemble(&ab);
-	t_arr commands = pw_remove_extra_rotations(&ab.commands);
-	a_iter(&commands, pw_print_str);
+	out = arr_new(1, sizeof(int));
+	i = 0;
+	while (i < raw.len)
+	{
+		n = arr_get(&raw, i);
+		pos = pw_find_position(raw, *n);
+		arr_add_last(&out, &pos);
+		i++;
+	}
+	return (out);
 }
 
+t_ssize		free_str(void *data, t_size i)
+{
+	t_str	*ptr;
+
+	ptr = data;
+	str_free(ptr);
+	return (i);
+}
+
+t_stacks	pw_new_stack(char *filename)
+{
+	t_page		file;
+	t_stacks	ab;
+	t_array		raw;
+
+	file = page_new(1);
+	page_read_file(&file, filename);
+	raw = pw_parse_stack(file);
+	arr_iter(&raw, print_int);
+	print("\n");
+	arr_iter(&file, free_str);
+	arr_free(&file);
+	ab.a = pw_norm_stack(raw);
+	arr_free(&raw);
+	ab.b = arr_new(1, sizeof(int));
+	ab.commands = arr_new(1, sizeof(int));
+	ab.stack_size = ab.a.len;
+	return (ab);
+}
+
+void	pw_free_stacks(t_stacks ab)
+{
+	arr_free(&ab.a);
+	arr_free(&ab.b);
+	arr_free(&ab.commands);
+}
