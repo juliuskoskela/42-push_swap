@@ -10,7 +10,7 @@ typedef struct	s_stacks
 	size_t		stack_size;
 }				t_stacks;
 
-static const t_size	cmd_count = 11;
+static const t_size	cmd_count = 3;
 
 static const char	*comid [] =
 {
@@ -52,16 +52,16 @@ typedef void (*t_command)(t_stacks *ab);
 static const	t_command cmd[] =
 {
 	sa,
-	sb,
-	ss,
-	pa,
-	pb,
+	// sb,
+	// ss,
+	// pa,
+	// pb,
 	ra,
-	rb,
-	rr,
+	// rb,
+	// rr,
 	rra,
-	rrb,
-	rrr
+	// rrb,
+	// rrr
 };
 
 

@@ -2,6 +2,8 @@
 # include <string.h>
 # define PRINT print
 
+t_ssize	print_int(void *data, t_size i);
+
 ///////////////////////////////////////////////////////////////////////////////
 
 t_ssize		print_uint64(void *data, t_size i);
@@ -29,36 +31,108 @@ void		pw_disassemble(t_stacks *ab);
 
 ///////////////////////////////////////////////////////////////////////////////
 
-t_bool		pw_sorted(t_array src)
+int	pw_dist(t_stacks *ab)
 {
+	int		*val;
+	int		dist;
 	t_size	i;
-	int		*f;
-	int		*s;
 
-	i = 1;
-	while (i < src.len)
+	dist = 0;
+	i = 0;
+	while (i < ab->a.len)
 	{
-		f = arr_get(&src, i - 1);
-		s = arr_get(&src, i);
-		if (*s <= *f)
-			return (FALSE);
+		val = arr_get(&ab->a, i);
+		if ((i + ab->a.len - *val) < i - *val)
+			dist += i + ab->a.len - *val;
+		else
+			dist += i - *val;
 		i++;
 	}
-	return (TRUE);
+	return (dist);
 }
 
+t_stacks	pw_copy_stacks(t_stacks *ab)
+{
+	t_stacks	out;
+
+	out.a = arr_new(ab->a.raw.size + 1, sizeof(int));
+	out.b = arr_new(ab->a.raw.size + 1, sizeof(int));
+	out.commands = arr_new(1, sizeof(int));
+	out.stack_size = ab->stack_size;
+	arr_copy(&out.a, &ab->a);
+	arr_copy(&out.b, &ab->b);
+	return (out);
+}
+
+int	pw_test_cmd(t_stacks *ab, t_command cmd)
+{
+	t_stacks	cpy;
+	int			res;
+
+	cpy = pw_copy_stacks(ab);
+	cmd(&cpy);
+	res = pw_dist(&cpy);
+	pw_free_stacks(cpy);
+	return (res);
+}
+
+int	pw_choose_cmd(int *dist_totals)
+{
+	int		cur;
+	int		pos;
+	t_size	i;
+
+	cur = dist_totals[0];
+	pos = 0;
+	i = 0;
+	while (i < cmd_count)
+	{
+		if (cur > dist_totals[i])
+		{
+			pos = i;
+			cur = dist_totals[i];
+		}
+		i++;
+	}
+	return (pos);
+}
+
+int	pw_loop(t_stacks *ab)
+{
+	int			exec;
+	int			org_dist_total;
+	int			dist_totals[15];
+	t_size		i;
+
+	org_dist_total = pw_dist(ab);
+	if (org_dist_total == 0 || ab->a.len < 3)
+		return (1);
+	print("last cmd %s total dist = %d\n", (char *)arr_get_last(&ab->commands), org_dist_total);
+	i = 0;
+	while (i < cmd_count)
+	{
+		dist_totals[i] = pw_test_cmd(ab, cmd[i]);
+		print("%d\n", dist_totals[i]);
+		i++;
+	}
+	i = 0;
+	exec = pw_choose_cmd(dist_totals);
+	print("%d\n", exec);
+	cmd[exec](ab);
+	arr_add_last(&ab->commands, (char *)comid[exec]);
+	// return (pw_loop(ab));
+	return (1);
+}
+
+/// 1 2 6 4 5 3 7 8
 int main(int argc, char **argv)
 {
 	t_stacks	ab;
 
 	ab = pw_new_stack(argv[1]);
 	pw_print_stacks(ab);
-	pw_disassemble(&ab);
-	pw_print_stacks(ab);
-	if (pw_sorted(ab.a))
-		print("sorted = yes\n");
-	else
-		print("sorted = no\n");
+	pw_loop(&ab);
+	// pw_dist(&ab);
 	pw_free_stacks(ab);
 }
 
@@ -271,6 +345,25 @@ void	pw_disassemble(t_stacks *ab)
 
 ///////////////////////////////////////////////////////////////////////////////
 
+
+t_bool		pw_sorted(t_array src)
+{
+	t_size	i;
+	int		*f;
+	int		*s;
+
+	i = 1;
+	while (i < src.len)
+	{
+		f = arr_get(&src, i - 1);
+		s = arr_get(&src, i);
+		if (*s <= *f)
+			return (FALSE);
+		i++;
+	}
+	return (TRUE);
+}
+
 t_ssize	print_int(void *data, t_size i)
 {
 	int	*ptr;
@@ -368,7 +461,7 @@ t_array	pw_norm_stack(t_array raw)
 	return (out);
 }
 
-t_ssize		free_str(void *data, t_size i)
+t_ssize	free_str(void *data, t_size i)
 {
 	t_str	*ptr;
 
