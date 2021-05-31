@@ -1,47 +1,51 @@
+#include "../core/inc/core.h"
+# include <time.h>
 
-#include "../array/inc/array.h"
-
-void			print(void **data, size_t i)
+t_ssize	print_int64(void *data, t_size i)
 {
-	int			*ptr;
-	
-	ptr = *data;
-	printf("%d\n", *ptr);
+	int	*ptr;
+
+	ptr = data;
+	print("%d\n", *ptr);
+	return (i);
 }
 
-void			shuffle(t_arr *arr, int n)
+void	shuffle(t_array *arr, int n)
 {
-    if (n > 1) 
-    {
-        int i;
-        srand(time(NULL));
-        for (i = 0; i < n - 1; i++) 
-        {
-          int j = i + rand() / (RAND_MAX / (n - i) + 1);
-          int *t = arr->data[j];
-          arr->data[j] = arr->data[i];
-          arr->data[i] = t;
-        }
-    }
+	t_int64	i;
+	t_int64	j;
+	t_int64	*s;
+	t_int64	*t;
+
+	if (n < 1)
+		return ;
+	srand(time(NULL));
+	i = 0;
+	while (i < n - 1)
+	{
+		j = i + rand() / (RAND_MAX / (n - i) + 1);
+		s = arr_get(arr, i);
+		t = arr_get(arr, j);
+		mswap(s, t, sizeof(t_int64));
+		i++;
+	}
 }
 
-int				main(int argc, char **argv)
+int	main(int argc, char **argv)
 {
-	t_arr		out;
-	size_t		size;
-    int			i;
-    int			*ptr;
+	t_array	out;
+	t_size	size;
+	t_size	i;
 
 	size = atoi(argv[1]);
-	out = a_alloc(size);
-    for (i = 0; i < size; i++)
+	out = arr_new(size, sizeof(t_int64));
+	i = 0;
+	while (i < size)
 	{
-		ptr = (int *)malloc(sizeof(int));
-		*ptr = i;
-		a_add(&out, ptr);
-    }
-    shuffle(&out, size);
-	a_iter(&out, print);
-	printf("\n");
+		arr_add_last(&out, &i);
+		i++;
+	}
+	shuffle(&out, size);
+	arr_iter(&out, print_int64);
+	arr_free(&out);
 }
-

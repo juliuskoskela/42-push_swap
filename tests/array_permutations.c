@@ -1,7 +1,7 @@
-# include <stdio.h> 
-# include <stdlib.h> 
+# include <stdio.h>
+# include <stdlib.h>
 
-void		print_arr(int a[], int n)
+void	print_arr(int a[], int n)
 {
 	int		i;
 
@@ -16,7 +16,7 @@ void		print_arr(int a[], int n)
 	printf(" }\n");
 }
 // Generating permutation using Heap Algorithm
-void		heap_permutation(int a[], int size, int n)
+void	heap_permutation(int a[], int size, int n)
 {
     // if size becomes 1 then prints the obtained
     // permutation
@@ -52,7 +52,7 @@ void		heap_permutation(int a[], int size, int n)
 		i++;
     }
 }
- 
+
 int			main(int argc, char **argv)
 {
 	int		size;
