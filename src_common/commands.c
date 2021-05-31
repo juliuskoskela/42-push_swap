@@ -13,7 +13,8 @@ void		sa(t_stacks *ab)
 	tmp = *top;
 	*top = *sec;
 	*sec = tmp;
-	// arr_add_last(&ab->commands, "sa");
+	arr_add_last(&ab->commands, "sa");
+	print("sa\n");
 }
 
 void		sb(t_stacks *ab)
@@ -29,14 +30,16 @@ void		sb(t_stacks *ab)
 	tmp = *top;
 	*top = *sec;
 	*sec = tmp;
-	// arr_add_last(&ab->commands, "sb");
+	arr_add_last(&ab->commands, "sb");
+	print("sb\n");
 }
 
 void		ss(t_stacks *ab)
 {
 	sa(ab);
 	sb(ab);
-	// arr_add_last(&ab->commands, "ss");
+	arr_add_last(&ab->commands, "ss");
+	print("ss\n");
 }
 
 void		pa(t_stacks *ab)
@@ -45,7 +48,8 @@ void		pa(t_stacks *ab)
 
 	arr_take_first(&tmp, &ab->b);
 	arr_add_first(&ab->a, &tmp);
-	// arr_add_last(&ab->commands, "pa");
+	arr_add_last(&ab->commands, "pa");
+	print("pa\n");
 }
 
 void		pb(t_stacks *ab)
@@ -54,45 +58,52 @@ void		pb(t_stacks *ab)
 
 	arr_take_first(&tmp, &ab->a);
 	arr_add_first(&ab->b, &tmp);
-	// arr_add_last(&ab->commands, "pb");
+	arr_add_last(&ab->commands, "pb");
+	print("pb\n");
 }
 
 void		ra(t_stacks *ab)
 {
 	arr_rotate(&ab->a, -1);
-	// arr_add_last(&ab->commands, "ra");
+	arr_add_last(&ab->commands, "ra");
+	print("ra\n");
 }
 
 void		rb(t_stacks *ab)
 {
 	arr_rotate(&ab->b, -1);
-	// arr_add_last(&ab->commands, "rb");
+	arr_add_last(&ab->commands, "rb");
+	print("rb\n");
 }
 
 void		rr(t_stacks *ab)
 {
 	ra(ab);
 	rb(ab);
-	// arr_add_last(&ab->commands, "rr");
+	arr_add_last(&ab->commands, "rr");
+	print("rr\n");
 }
 
 void		rra(t_stacks *ab)
 {
 	arr_rotate(&ab->a, 1);
-	// arr_add_last(&ab->commands, "rra");
+	arr_add_last(&ab->commands, "rra");
+	print("rra\n");
 }
 
 void		rrb(t_stacks *ab)
 {
 	arr_rotate(&ab->b, 1);
-	// arr_add_last(&ab->commands, "rrb");
+	arr_add_last(&ab->commands, "rrb");
+	print("rrb\n");
 }
 
 void		rrr(t_stacks *ab)
 {
 	rra(ab);
 	rrb(ab);
-	// arr_add_last(&ab->commands, "rrr");
+	arr_add_last(&ab->commands, "rrr");
+	print("rrr\n");
 }
 
 

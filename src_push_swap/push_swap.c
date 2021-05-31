@@ -2,6 +2,12 @@
 # include <string.h>
 # define PRINT print
 
+typedef struct	s_rotab
+{
+	int			a;
+	int			b;
+}				t_rotab;
+
 t_ssize	print_int(void *data, t_size i);
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -31,108 +37,172 @@ void		pw_disassemble(t_stacks *ab);
 
 ///////////////////////////////////////////////////////////////////////////////
 
-int	pw_dist(t_stacks *ab)
+int	pw_get_zero_index(t_stacks *ab)
 {
-	int		*val;
-	int		dist;
+	int		*val_1;
+	int		*val_2;
 	t_size	i;
 
-	dist = 0;
-	i = 0;
-	while (i < ab->a.len)
+	i = ab->a.len - 1;
+	while (i > 0)
 	{
-		val = arr_get(&ab->a, i);
-		if ((i + ab->a.len - *val) < i - *val)
-			dist += i + ab->a.len - *val;
-		else
-			dist += i - *val;
-		i++;
+		val_1 = arr_get(&ab->a, i);
+		val_2 = arr_get(&ab->a, i - 1);
+		if (*val_1 < *val_2)
+			return (i);
+		i--;
 	}
-	return (dist);
+	return (0);
 }
 
-t_stacks	pw_copy_stacks(t_stacks *ab)
+int	pw_pos_in_a(t_stacks *ab, int b_val)
 {
-	t_stacks	out;
-
-	out.a = arr_new(ab->a.raw.size + 1, sizeof(int));
-	out.b = arr_new(ab->a.raw.size + 1, sizeof(int));
-	out.commands = arr_new(1, sizeof(int));
-	out.stack_size = ab->stack_size;
-	arr_copy(&out.a, &ab->a);
-	arr_copy(&out.b, &ab->b);
-	return (out);
-}
-
-int	pw_test_cmd(t_stacks *ab, t_command cmd)
-{
-	t_stacks	cpy;
-	int			res;
-
-	cpy = pw_copy_stacks(ab);
-	cmd(&cpy);
-	res = pw_dist(&cpy);
-	pw_free_stacks(cpy);
-	return (res);
-}
-
-int	pw_choose_cmd(int *dist_totals)
-{
-	int		cur;
-	int		pos;
+	int		*a_val;
+	t_size	zero_pos;
 	t_size	i;
 
-	cur = dist_totals[0];
-	pos = 0;
-	i = 0;
-	while (i < cmd_count)
+	zero_pos = pw_get_zero_index(ab);
+	i = zero_pos;
+	while (1)
 	{
-		if (cur > dist_totals[i])
+		a_val = arr_get(&ab->a, i);
+		if (*a_val > b_val)
+			return (i);
+		i = (i + 1) % ab->a.len;
+		if (i == zero_pos)
+			break ;
+	}
+	return (zero_pos);
+}
+
+t_rotab	pw_calc_rots(t_stacks *ab, int src_index)
+{
+	t_rotab	rots;
+	int		*a_val;
+	int		*b_val;
+	int		dst_index;
+	t_size	i;
+
+	b_val = arr_get(&ab->b, src_index);
+	dst_index = pw_pos_in_a(ab, *b_val);
+	if (src_index >= ab->b.len / 2)
+		rots.b = ab->b.len - src_index;
+	else
+		rots.b = (src_index) * -1;
+	if (dst_index >= ab->a.len / 2)
+		rots.a = ab->a.len - dst_index;
+	else
+		rots.a = (dst_index) * -1;
+	return (rots);
+}
+
+int		pw_calc_dist(t_stacks *ab, t_size src_index)
+{
+	t_rotab	rots;
+
+	rots = pw_calc_rots(ab, src_index);
+	return (math_abs(rots.a) + math_abs(rots.b) + 1);
+}
+
+t_size	pw_choose_val_in_b(t_stacks *ab)
+{
+	int		tmp;
+	int		ret;
+	t_size	pos;
+	t_size	i;
+
+	ret = pw_calc_dist(ab, 0);
+	pos = 0;
+	i = 1;
+	while (i < ab->b.len)
+	{
+		tmp = pw_calc_dist(ab, i);
+		if (tmp < ret)
 		{
+			ret = tmp;
 			pos = i;
-			cur = dist_totals[i];
 		}
 		i++;
 	}
 	return (pos);
 }
 
-int	pw_loop(t_stacks *ab)
+int	pw_exec(t_stacks *ab, t_size count, int cmd)
 {
-	int			exec;
-	int			org_dist_total;
-	int			dist_totals[15];
-	t_size		i;
+	t_size	i;
 
-	org_dist_total = pw_dist(ab);
-	if (org_dist_total == 0 || ab->a.len < 3)
-		return (1);
-	print("last cmd %s total dist = %d\n", (char *)arr_get_last(&ab->commands), org_dist_total);
 	i = 0;
-	while (i < cmd_count)
+	while (i < count)
 	{
-		dist_totals[i] = pw_test_cmd(ab, cmd[i]);
-		print("%d\n", dist_totals[i]);
+		g_cmd[cmd](ab);
 		i++;
 	}
+}
+int	pw_exec_moves(t_stacks *ab, t_rotab rots)
+{
+	if (rots.b > 0)
+		pw_exec(ab, rots.b, RRB);
+	else
+		pw_exec(ab, math_abs(rots.b), RB);
+	if (rots.a > 0)
+		pw_exec(ab, rots.a, RRA);
+	else
+		pw_exec(ab, math_abs(rots.a), RA);
+	pw_exec(ab, 1, PA);
+}
+
+void	pw_rot_back(t_stacks *ab)
+{
+	int		index;
+
+	index = pw_get_zero_index(ab);
+	if (index >= ab->a.len / 2)
+		pw_exec(ab, ab->a.len - index, RRA);
+	else
+		pw_exec(ab, index, RA);
+}
+
+int	pw_merge(t_stacks *ab)
+{
+	t_rotab	rots;
+	t_size	src_index;
+	t_size	i;
+
 	i = 0;
-	exec = pw_choose_cmd(dist_totals);
-	print("%d\n", exec);
-	cmd[exec](ab);
-	arr_add_last(&ab->commands, (char *)comid[exec]);
-	// return (pw_loop(ab));
+	while (ab->b.len)
+	{
+		// Find b index to move.
+		src_index = pw_choose_val_in_b(ab);
+		// Calculate moves -> b_rots + a_rots + pb
+		rots = pw_calc_rots(ab, src_index);
+		// Execute moves
+		pw_exec_moves(ab, rots);
+	}
+	pw_rot_back(ab);
 	return (1);
 }
 
-/// 1 2 6 4 5 3 7 8
+void	pw_sort(t_stacks *ab)
+{
+	t_size	i;
+
+	if (ab->a.len <= 3)
+	{
+		pw_sort_last3_in_a(ab);
+		return ;
+	}
+	pw_exec(ab, ab->a.len - 3, PB);
+	pw_sort_last3_in_a(ab);
+	pw_merge(ab);
+}
+
 int main(int argc, char **argv)
 {
 	t_stacks	ab;
 
 	ab = pw_new_stack(argv[1]);
+	pw_sort(&ab);
 	pw_print_stacks(ab);
-	pw_loop(&ab);
-	// pw_dist(&ab);
 	pw_free_stacks(ab);
 }
 

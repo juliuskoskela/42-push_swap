@@ -56,7 +56,7 @@ void			rrr(t_stacks *ab);
 
 typedef void (*t_command)(t_stacks *ab);
 
-static const	t_command cmd[] =
+static const	t_command g_cmd[] =
 {
 	sa,
 	sb,

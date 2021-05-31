@@ -6,7 +6,7 @@ t_ssize	print_int64(void *data, t_size i)
 	int	*ptr;
 
 	ptr = data;
-	print("%d\n", *ptr);
+	printf("%d\n", *ptr);
 	return (i);
 }
 
