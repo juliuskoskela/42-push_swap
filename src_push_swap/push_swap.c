@@ -235,9 +235,9 @@ void	ps_opt_extra(t_stacks *ab)
 	b_sec = arr_get(&ab->b, 1);
 	if (*a_top > *a_sec && *b_top < *b_sec)
 		ss(ab);
-	else if (*a_top > *a_sec)
+	if (*a_top > *a_sec)
 		sa(ab);
-	else if (*b_top < *b_sec)
+	if (*b_top < *b_sec)
 		sb(ab);
 }
 
@@ -250,8 +250,7 @@ int	ps_merge(t_stacks *ab)
 	i = 0;
 	while (ab->b.len)
 	{
-		if (ab->a.len > 2 && ab->b.len > 2
-			&& ab->stack_size > 100)
+		if (ab->a.len > 2 && ab->b.len > 2)
 			ps_opt_extra(ab);
 		src_index = ps_choose_val_in_b(ab);
 		rots = ps_calc_rots(ab, src_index);
@@ -259,42 +258,6 @@ int	ps_merge(t_stacks *ab)
 	}
 	ps_rot_back(ab);
 	return (1);
-}
-
-int	ps_calc_sorted(t_stacks *ab)
-{
-	int	*bot;
-	int	*sec;
-	t_size	i;
-	t_size	j;
-
-	j = 0;
-	i = ab->a.len - 1;
-	while (i > 1)
-	{
-		bot = arr_get(&ab->a, i);
-		sec = arr_get(&ab->a, i - 1);
-		if (*bot > *sec)
-			break ;
-		i--;
-		j++;
-	}
-	return (j);
-}
-
-void	ps_rot_sorted(t_stacks *ab)
-{
-	int	*top;
-	int	*bot;
-
-	while (1)
-	{
-		top = arr_get_first(&ab->a);
-		bot = arr_get_last(&ab->a);
-		if (*top < *bot)
-			break ;
-		rra(ab);
-	}
 }
 
 void	ps_split(t_stacks *ab, int len)
@@ -328,7 +291,6 @@ void	ps_split(t_stacks *ab, int len)
 		ps_exec(ab, 1, PB);
 		i++;
 	}
-	// ps_print_stacks(*ab);
 }
 
 void	ps_sort(t_stacks *ab)
@@ -370,7 +332,7 @@ int main(int argc, char **argv)
 	if (ps_sorted(ab.a) == FALSE || ab.b.len > 0)
 		print("Sorting failed!\n");
 	parr_iter(&ab.commands, print_str);
-	// print("count = %d\n", ab.commands.len);
+	// print("%d\n", ab.commands.len);
 	ps_free_stacks(ab);
 }
 
