@@ -6,7 +6,7 @@ typedef struct	s_stacks
 {
 	t_array		a;
 	t_array		b;
-	t_array		commands;
+	t_parray	commands;
 	size_t		stack_size;
 }				t_stacks;
 
