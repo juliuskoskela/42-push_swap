@@ -65,8 +65,10 @@ int	main(int argc, char **argv)
 	{
 		cmd_flag = ps_check_cmd(cur_cmd);
 		if (cmd_flag == -1)
+		{
+			print("Invalid command!\n");
 			exit(-1);
-		print("%s\n", cur_cmd);
+		}
 		ps_exec(&ab, 1, cmd_flag);
 		free(cur_cmd);
 	}

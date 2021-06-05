@@ -67,6 +67,13 @@ static int ps_parse_args(t_array *raw, char *args)
 	return (1);
 }
 
+t_ssize print_int(void *data, t_size i)
+{
+	int *ptr = data;
+	print("%d\n", *ptr);
+	return (i);
+}
+
 t_stacks	ps_new_stack(char *args)
 {
 	t_stacks	ab;

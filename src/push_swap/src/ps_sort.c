@@ -76,7 +76,7 @@ static void	ps_split(t_stacks *ab, int len)
 		}
 		if (ps_sorted(ab->a) == TRUE)
 			break ;
-		ps_exec(ab, 1, PB);
+		pb(ab);
 		i++;
 	}
 }
