@@ -3,7 +3,7 @@ NAME = push_swap
 OBJ_DIR = obj
 SRC_DIR = src
 DEP_DIR = .deps
-CORE_DIR = ../core
+CORE_DIR = ../../core
 COMMON_DIR = ../common
 
 CORE = $(CORE_DIR)/libcore.a
@@ -22,8 +22,8 @@ SRC = $(addprefix src/, \
 OBJ = $(subst $(SRC_DIR), $(OBJ_DIR), $(SRC:.c=.o))
 
 CC = gcc
-CFLAGS = -Wall -Wextra -Werror
-CPPFLAGS = -I . -I inc -I ../core -I ../common
+CFLAGS = -Wall -Wextra -Werror -fsanitize=address
+CPPFLAGS = -I . -I inc -I $(CORE_DIR) -I $(COMMON_DIR)
 LDFLAGS = -L $(CORE_DIR) -L $(COMMON_DIR)
 DEPFLAGS = -MT $@ -MMD -MP -MF $(DEP_DIR)/$*.d
 COMPILE.c = $(CC) $(DEPFLAGS) $(CFLAGS) $(CPPFLAGS) $(LDFLAGS) -c

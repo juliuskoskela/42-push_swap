@@ -1,4 +1,4 @@
-#include "../core/inc/core.h"
+#include "../../core/inc/core.h"
 # include <time.h>
 
 t_ssize	print_int64(void *data, t_size i)

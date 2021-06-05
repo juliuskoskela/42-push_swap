@@ -10,13 +10,13 @@ SRC_DIR		=	src/
 INC_DIR		=	inc/
 OBJ_DIR		=	obj/
 DEP_DIR		=	.deps/
-CORE_DIR	= ../core
+CORE_DIR	= ../../core
 
 CORE		= $(CORE_DIR)/libcore.a
 
 CC			= gcc
 CFLAGS 		= -g -Wall -Wextra -Werror -fPIC
-CPPFLAGS	= -I . -I inc -I ../core
+CPPFLAGS	= -I . -I inc -I $(CORE_DIR)
 LDFLAGS		= -L $(CORE_DIR)
 DEPFLAGS	= -MT $@ -MMD -MP -MF $(DEP_DIR)$*.d
 COMPILE.c	= $(CC) $(DEPFLAGS) $(CFLAGS) $(CPPFLAGS) $(LDFLAGS) -c

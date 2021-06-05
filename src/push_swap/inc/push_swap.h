@@ -1,7 +1,7 @@
 #ifndef PUSH_SWAP_H
 # define PUSH_SWAP_H
 # include "../../core/inc/core.h"
-# include "../../common/inc/common.h"
+# include "../common/inc/common.h"
 
 typedef struct	s_rots
 {

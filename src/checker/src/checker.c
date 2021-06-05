@@ -66,7 +66,9 @@ int	main(int argc, char **argv)
 		cmd_flag = ps_check_cmd(cur_cmd);
 		if (cmd_flag == -1)
 			exit(-1);
+		print("%s\n", cur_cmd);
 		ps_exec(&ab, 1, cmd_flag);
+		free(cur_cmd);
 	}
 	if (ps_sorted(ab.a) && ab.b.len == 0)
 		print("OK\n");
