@@ -7,6 +7,7 @@ all: $(BUILD_DIR)
 	$(MAKE) -C $(CHECKER)
 	cp $(PUSH_SWAP)/push_swap build
 	cp $(CHECKER)/checker build
+	gcc tests/random_numbers.c core/libcore.a -o build/random
 
 $(BUILD_DIR): ; @mkdir -p $@
 
