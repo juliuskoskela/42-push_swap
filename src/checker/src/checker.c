@@ -28,16 +28,17 @@ static int	ps_get_cmd(char **dst)
 	return (1);
 }
 
-int	ps_check_cmd(char *cmd)
+static int	ps_check_cmd(char *cmd)
 {
-	char	*cmd_id [] = { "sa", "sb", "ss",
-							"pa", "pb", "ra",
-							"rb", "rr", "rra",
-							"rrb", "rrr" };
+	char	*cmd_id [] = {
+		"sa", "sb", "ss",
+		"pa", "pb", "ra",
+		"rb", "rr", "rra",
+		"rrb", "rrr", "done"};
 	t_size	i;
 
 	i = 0;
-	while (i < 11)
+	while (i < 12)
 	{
 		if (s_cmp(cmd, cmd_id[i]) == 0)
 			return (i);
@@ -46,32 +47,42 @@ int	ps_check_cmd(char *cmd)
 	return (-1);
 }
 
-void	exit_usage(void)
+static void	ps_cmd_loop(t_stacks *ab, int verb)
 {
-	print("usage: [args]\n");
-	exit(-1);
+	char		*cur_cmd;
+	int			cmd_flag;
+
+	while (ps_get_cmd(&cur_cmd) > 0)
+	{
+		cmd_flag = ps_check_cmd(cur_cmd);
+		if (cmd_flag == DONE)
+			break ;
+		if (cmd_flag == -1
+			|| (cmd_flag == PA && ab->b.len == 0)
+			|| (cmd_flag == PB && ab->a.len == 0))
+			print("Error\n");
+		else if (cmd_flag >= 0 && cmd_flag < 11)
+			ps_exec(ab, 1, cmd_flag);
+		else
+			print("Error\n");
+		if (verb == 1)
+			ps_print_stacks(*ab);
+		free(cur_cmd);
+	}
 }
 
 int	main(int argc, char **argv)
 {
-	char		*cur_cmd;
-	int			cmd_flag;
+	int			verb;
 	t_stacks	ab;
 
-	if (argc != 2)
-		exit_usage();
-	ab = ps_new_stack(argv[1]);
-	while (ps_get_cmd(&cur_cmd) > 0)
-	{
-		cmd_flag = ps_check_cmd(cur_cmd);
-		if (cmd_flag == -1)
-		{
-			print("Invalid command!\n");
-			exit(-1);
-		}
-		ps_exec(&ab, 1, cmd_flag);
-		free(cur_cmd);
-	}
+	verb = 0;
+	if (argc < 2)
+		exit(-1);
+	if (s_cmp(argv[1], "-v") == 0)
+		verb = 1;
+	ab = ps_new_stack(argc - verb, argv + verb);
+	ps_cmd_loop(&ab, verb);
 	if (ps_sorted(ab.a) && ab.b.len == 0)
 		print("OK\n");
 	else

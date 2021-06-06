@@ -16,5 +16,4 @@ void	ps_print_stacks(t_stacks ab)
 	print("\nb: ");
 	arr_iter(&ab.b, print_int);
 	print("\n");
-	print("commands count = %d\n", ab.commands.len);
 }

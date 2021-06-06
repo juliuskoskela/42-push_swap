@@ -21,12 +21,13 @@ SRC = $(addprefix src/, \
 
 OBJ = $(subst $(SRC_DIR), $(OBJ_DIR), $(SRC:.c=.o))
 
-CC = gcc
-CFLAGS = -Wall -Wextra -Werror -fsanitize=address
-CPPFLAGS = -I . -I inc -I $(CORE_DIR) -I $(COMMON_DIR)
-LDFLAGS = -L $(CORE_DIR) -L $(COMMON_DIR)
-DEPFLAGS = -MT $@ -MMD -MP -MF $(DEP_DIR)/$*.d
-COMPILE.c = $(CC) $(DEPFLAGS) $(CFLAGS) $(CPPFLAGS) $(LDFLAGS) -c
+CC			= gcc
+CFLAGS		= -Wall -Wextra -Werror
+CPPFLAGS	= -I . -I inc -I $(CORE_DIR) -I $(COMMON_DIR)
+LDLIBS		= -l core -l com
+LDFLAGS		= -L $(CORE_DIR) -L $(COMMON_DIR) $(LDLIBS)
+DEPFLAGS	= -MT $@ -MMD -MP -MF $(DEP_DIR)/$*.d
+COMPILE.c	= $(CC) $(DEPFLAGS) $(CFLAGS) $(CPPFLAGS) -c
 
 .PHONY: all re clean fclean
 

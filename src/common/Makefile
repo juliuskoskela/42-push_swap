@@ -17,7 +17,6 @@ CORE		= $(CORE_DIR)/libcore.a
 CC			= gcc
 CFLAGS 		= -g -Wall -Wextra -Werror -fPIC
 CPPFLAGS	= -I . -I inc -I $(CORE_DIR)
-LDFLAGS		= -L $(CORE_DIR)
 DEPFLAGS	= -MT $@ -MMD -MP -MF $(DEP_DIR)$*.d
 COMPILE.c	= $(CC) $(DEPFLAGS) $(CFLAGS) $(CPPFLAGS) $(LDFLAGS) -c
 
@@ -37,6 +36,7 @@ SRC_BASE	=	pa.c \
 				ps_new_stack.c \
 				ps_print_stacks.c \
 				ps_sorted.c \
+				ps_norm_stack.c \
 
 SRC			=	$(addprefix $(SRC_DIR), $(SRC_BASE))
 OBJ			=	$(addprefix $(OBJ_DIR), $(SRC_BASE:.c=.o))
@@ -44,8 +44,8 @@ OBJ			=	$(addprefix $(OBJ_DIR), $(SRC_BASE:.c=.o))
 all:
 				@$(MAKE) -j $(NAME)
 
-$(NAME): $(OBJ) $(CORE)
-				@ar -rcs $(NAME) $(OBJ) $(CORE)
+$(NAME): $(OBJ)
+				@ar -rcs $(NAME) $(OBJ)
 				@echo "\\n\033[32;1mCHECKER FUNCTIONS COMPILED\033[0m \\n"
 
 $(OBJ_DIR)%.o: $(SRC_DIR)%.c $(DEP_DIR)%.d | $(OBJ_DIR) $(DEP_DIR)

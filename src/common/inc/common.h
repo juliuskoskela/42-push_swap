@@ -13,7 +13,7 @@ typedef struct	s_stacks
 typedef enum	e_flags
 {
 	SA, SB, SS, PA, PB, RA,
-	RB, RR, RRA, RRB, RRR
+	RB, RR, RRA, RRB, RRR, DONE
 }				t_flags;
 
 void	sa(t_stacks *ab);
@@ -38,8 +38,9 @@ static const	t_command g_cmd[] =
 
 void		ps_exec(t_stacks *ab, t_size count, int cmd);
 void		ps_free_stacks(t_stacks ab);
-t_stacks	ps_new_stack(char *filename);
+t_stacks	ps_new_stack(int argc, char **argv);
 void		ps_print_stacks(t_stacks ab);
 t_bool		ps_sorted(t_array src);
+t_array		ps_norm_stack(t_array raw);
 
 #endif

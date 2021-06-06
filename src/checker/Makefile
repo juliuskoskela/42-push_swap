@@ -16,7 +16,7 @@ SRC = $(addprefix src/, \
 OBJ = $(subst $(SRC_DIR), $(OBJ_DIR), $(SRC:.c=.o))
 
 CC = gcc
-CFLAGS = -Wall -Wextra -Werror -fsanitize=address
+CFLAGS = -Wall -Wextra -Werror
 CPPFLAGS = -I . -I inc -I ../../core -I ../common
 LDFLAGS = -L $(CORE_DIR) -L $(COMMON_DIR)
 DEPFLAGS = -MT $@ -MMD -MP -MF $(DEP_DIR)/$*.d

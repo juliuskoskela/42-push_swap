@@ -15,7 +15,7 @@ int	main(int argc, char **argv)
 
 	if (argc < 2)
 		return (-1);
-	ab = ps_new_stack(argv[1]);
+	ab = ps_new_stack(argc, argv);
 	ps_sort(&ab);
 	parr_iter(&ab.commands, print_str);
 	//print("\n");
