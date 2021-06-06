@@ -27,3 +27,15 @@ printf "kk\n" | ./build/checker "1 3 5"
 printf "\nEVAL TEST: Unkown command 2\n\n"
 printf "printf \"   pb \" | ./build/checker \"1 3 5\"\n"
 printf "kk\n" | ./build/checker "1 3 5"
+
+printf "\nEVAL TEST: Push swap dentity 1\n\n"
+printf "./build/push_swap 42\n"
+./build/push_swap 42
+
+printf "\nEVAL TEST: Push swap dentity 2\n\n"
+printf "./build/push_swap 0 1 2 3\n"
+./build/push_swap 0 1 2 3
+
+printf "\nEVAL TEST: Push swap dentity 3\n\n"
+printf "./build/push_swap 0 1 2 3 4 5 6 7 8 9\n"
+./build/push_swap 0 1 2 3 4 5 6 7 8 9
