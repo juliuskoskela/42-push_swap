@@ -87,5 +87,7 @@ int	main(int argc, char **argv)
 		print("OK\n");
 	else
 		print("KO\n");
+	if (verb == 1)
+		print("COMMANDS USED %d\n", ab.commands.len);
 	ps_free_stacks(ab);
 }
