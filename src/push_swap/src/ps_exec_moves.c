@@ -1,6 +1,6 @@
 # include "../inc/push_swap.h"
 
-static t_rots	ps_merge_rots(t_stacks *ab, t_rots rots)
+static t_rots	ps_exec_merge_rots(t_stacks *ab, t_rots rots)
 {
 	if (rots.a > 0)
 	{
@@ -22,13 +22,13 @@ static t_rots	ps_merge_rots(t_stacks *ab, t_rots rots)
 		if (rots.a < rots.b)
 		{
 			ps_exec(ab, math_abs(rots.b), RR);
-			rots.a -= rots.b;
+			rots.a = -((math_abs(rots.a) - math_abs(rots.b)));
 			rots.b = 0;
 		}
 		else
 		{
 			ps_exec(ab, math_abs(rots.a), RR);
-			rots.b -= rots.a;
+			rots.b = -((math_abs(rots.b) - math_abs(rots.a)));
 			rots.a = 0;
 		}
 	}
@@ -40,7 +40,7 @@ void	ps_exec_moves(t_stacks *ab, t_rots rots)
 
 	if ((rots.a > 0 && rots.b > 0)
 		|| (rots.a < 0 && rots.b < 0))
-		rots = ps_merge_rots(ab, rots);
+		rots = ps_exec_merge_rots(ab, rots);
 	if (rots.b > 0)
 		ps_exec(ab, rots.b, RRB);
 	else
