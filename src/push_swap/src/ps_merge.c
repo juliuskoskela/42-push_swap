@@ -34,25 +34,6 @@ static void	ps_rot_back(t_stacks *ab)
 		ps_exec(ab, index, RA);
 }
 
-static t_rots	ps_calc_rots(t_stacks *ab, int src_index)
-{
-	t_rots	rots;
-	int		*b_val;
-	int		dst_index;
-
-	b_val = arr_get(&ab->b, src_index);
-	dst_index = ps_value_target_index(ab, *b_val);
-	if (src_index >= (int)(ab->b.len / 2))
-		rots.b = ab->b.len - src_index;
-	else
-		rots.b = -src_index;
-	if (dst_index >= (int)(ab->a.len / 2))
-		rots.a = ab->a.len - dst_index;
-	else
-		rots.a = -dst_index;
-	return (rots);
-}
-
 void	ps_merge(t_stacks *ab)
 {
 	t_rots	rots;
@@ -61,7 +42,7 @@ void	ps_merge(t_stacks *ab)
 	while (ab->b.len)
 	{
 		src_index = ps_choose_val_in_b(ab);
-		rots = ps_calc_rots(ab, src_index);
+		rots = ps_calc_opt_rots(ab, src_index);
 		ps_exec_moves(ab, rots);
 	}
 	ps_rot_back(ab);

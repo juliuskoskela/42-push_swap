@@ -17,6 +17,8 @@ SRC = $(addprefix src/, \
 	ps_sort.c \
 	ps_value_target_index.c \
 	ps_stack_zero_index.c \
+	ps_calc_opt_rots.c \
+	ps_merge_rots.c \
 )
 
 OBJ = $(subst $(SRC_DIR), $(OBJ_DIR), $(SRC:.c=.o))

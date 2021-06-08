@@ -49,33 +49,71 @@ static void	ps_sort_last3_in_a(t_stacks *ab)
 	}
 }
 
+static int	ps_sorted_substack_len(t_stacks *ab, int index)
+{
+	int		*cur1;
+	int		*cur2;
+	int		sub_len;
+	t_size	i;
+
+	sub_len = 0;
+	i = index;
+	while (sub_len < (int)ab->a.len - 1)
+	{
+		cur1 = arr_get(&ab->a, i);
+		cur2 = arr_get(&ab->a, (i + 1) % ab->a.len);
+		if (*cur1 > *cur2)
+			break ;
+		i = (i + 1) % ab->a.len;
+		sub_len++;
+	}
+	return (sub_len);
+}
+
+static void	ps_rot_sorted_substack(t_stacks *ab)
+{
+	int		sub_len;
+	int		best_len;
+	int		pos;
+	int		rots;
+	t_size	i;
+
+	best_len = ps_sorted_substack_len(ab, 0);
+	pos = 0;
+	i = 1;
+	while (i < ab->a.len)
+	{
+		sub_len = ps_sorted_substack_len(ab, i);
+		if (sub_len > best_len && (int)(ab->a.len - best_len - pos) < sub_len)
+		{
+			best_len = sub_len;
+			pos = i;
+		}
+		i++;
+	}
+	rots = ab->a.len - (best_len + 1) - pos;
+	if (rots > 0 && best_len > rots)
+		ps_exec(ab, rots, RRA);
+	else if (best_len > math_abs(rots))
+		ps_exec(ab, math_abs(rots), RA);
+}
+
 static void	ps_split(t_stacks *ab, int len)
 {
-	int *a_top;
-	int *a_bot;
-	int *b_top;
-	int *b_bot;
+	int	*a_top;
+	int	*a_bot;
 	int	i;
 
+	ps_rot_sorted_substack(ab);
 	i = 0;
 	while (i < len)
 	{
 		a_top = arr_get_first(&ab->a);
 		a_bot = arr_get_last(&ab->a);
-		if (*a_top > *a_bot)
-		{
-			if (ab->b.len > 2)
-			{
-				b_top = arr_get_first(&ab->a);
-				b_bot = arr_get_last(&ab->a);
-				if (*b_top < *b_bot)
-					rr(ab);
-			}
-			else
-				ra(ab);
-		}
 		if (ps_sorted(ab->a) == TRUE)
 			break ;
+		if (*a_top > *a_bot)
+			ra(ab);
 		pb(ab);
 		i++;
 	}

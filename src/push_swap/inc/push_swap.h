@@ -15,6 +15,8 @@ int			main(int argc, char **argv);
 int			ps_calc_dist(t_stacks *ab, t_size src_index);
 void		ps_exec_moves(t_stacks *ab, t_rots rots);
 int			ps_value_target_index(t_stacks *ab, int b_val);
+t_rots		ps_calc_opt_rots(t_stacks *ab, int src_index);
+t_rots		ps_merge_rots(t_rots rots);
 int			ps_stack_zero_index(t_stacks *ab);
 void		ps_merge(t_stacks *ab);
 void		ps_sort(t_stacks *ab);
