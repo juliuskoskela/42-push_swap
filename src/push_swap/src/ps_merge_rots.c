@@ -9,12 +9,12 @@ t_rots	ps_merge_rots(t_rots rots)
 		if (rots.a > rots.b)
 		{
 			rots.a -= rots.b;
-			rots.b = 0;
+			rots.b = rots.b;
 		}
 		else
 		{
 			rots.b -= rots.a;
-			rots.a = 0;
+			rots.a = rots.a;
 		}
 	}
 	else
@@ -22,12 +22,12 @@ t_rots	ps_merge_rots(t_rots rots)
 		if (rots.a < rots.b)
 		{
 			rots.a = -((math_abs(rots.a) - math_abs(rots.b)));
-			rots.b = 0;
+			rots.b = rots.b;
 		}
 		else
 		{
 			rots.b = -((math_abs(rots.b) - math_abs(rots.a)));
-			rots.a = 0;
+			rots.a = rots.a;
 		}
 	}
 	return (rots);

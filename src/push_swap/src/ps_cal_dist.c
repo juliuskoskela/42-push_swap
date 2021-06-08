@@ -9,5 +9,6 @@ int		ps_calc_dist(t_stacks *ab, t_size src_index)
 
 	rots = ps_calc_opt_rots(ab, src_index);
 	rots = ps_merge_rots(rots);
+	//print("rots: %d rotb %d\n", rots.a, rots.b);
 	return (math_abs(rots.a) + math_abs(rots.b));
 }
