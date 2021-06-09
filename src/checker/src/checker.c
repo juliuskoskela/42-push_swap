@@ -19,6 +19,7 @@ static int	ps_get_cmd(char **dst)
 	if (buf[i] != '\n')
 	{
 		s_readline(0, dst);
+		free(dst);
 		return (-1);
 	}
 	buf[i] = '\0';
@@ -34,11 +35,11 @@ static int	ps_check_cmd(char *cmd)
 		"sa", "sb", "ss",
 		"pa", "pb", "ra",
 		"rb", "rr", "rra",
-		"rrb", "rrr", "done"};
+		"rrb", "rrr"};
 	t_size	i;
 
 	i = 0;
-	while (i < 12)
+	while (i < 11)
 	{
 		if (s_cmp(cmd, cmd_id[i]) == 0)
 			return (i);
@@ -55,18 +56,12 @@ static void	ps_cmd_loop(t_stacks *ab, int verb)
 	while (ps_get_cmd(&cur_cmd) > 0)
 	{
 		cmd_flag = ps_check_cmd(cur_cmd);
-		if (cmd_flag == DONE)
-		{
-			free(cur_cmd);
-			break ;
-		}
-		if (cmd_flag == -1
-			|| (cmd_flag == PA && ab->b.len == 0)
+		if ((cmd_flag == PA && ab->b.len == 0)
 			|| (cmd_flag == PB && ab->a.len == 0))
 			print("");
 		else if (cmd_flag >= 0 && cmd_flag < 11)
 			ps_exec(ab, 1, cmd_flag);
-		else
+		else if (cmd_flag == -1)
 		{
 			print("Error\n");
 			exit(-1);
