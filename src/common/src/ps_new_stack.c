@@ -2,7 +2,7 @@
 
 static int	is_legal(char c)
 {
-	if (!is_digit(c) && c != ' ')
+	if (!is_digit(c) && c != ' ' && c != '-')
 		return (0);
 	return (1);
 }
@@ -35,17 +35,17 @@ static int ps_parse_args(t_array *raw, char *args)
 	{
 		if (!is_legal(args[i]))
 			return (-1);
-		if (is_digit(args[i]))
+		if (is_digit(args[i]) || args[i] == '-' || args[i] == '+')
 		{
 			nbr = s_toi(&args[i]);
-			if (nbr > 2147483627 || nbr < 0)
+			if (nbr > 2147483627)
 			{
 				print("Error\n");
 				exit(-1);
 			}
 			ps_check_duplicate(raw, nbr);
 			arr_add_last(raw, &nbr);
-			while (is_digit(args[i]))
+			while (is_digit(args[i]) || args[i] == '-')
 				i++;
 		}
 		else
