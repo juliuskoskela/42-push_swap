@@ -20,7 +20,8 @@ static int	ps_get_cmd(char **dst)
 	if (buf[i] != '\n')
 	{
 		s_readline(0, dst);
-		return (-1);
+		print("Error\n");
+		exit(-1);
 	}
 	buf[i] = '\0';
 	*dst = s_dup(buf);
