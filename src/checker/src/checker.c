@@ -19,7 +19,6 @@ static int	ps_get_cmd(char **dst)
 	if (buf[i] != '\n')
 	{
 		s_readline(0, dst);
-		free(dst);
 		return (-1);
 	}
 	buf[i] = '\0';
