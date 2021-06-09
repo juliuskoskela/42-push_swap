@@ -2,7 +2,7 @@
 
 static int	is_legal(char c)
 {
-	if (!is_digit(c) && c != ' ' && c != '-')
+	if (!is_digit(c) && c != ' ' && c != '-' && c != '+')
 		return (0);
 	return (1);
 }
@@ -45,7 +45,7 @@ static int ps_parse_args(t_array *raw, char *args)
 			}
 			ps_check_duplicate(raw, nbr);
 			arr_add_last(raw, &nbr);
-			while (is_digit(args[i]) || args[i] == '-')
+			while (is_digit(args[i]) || args[i] == '-' || args[i] == '+')
 				i++;
 		}
 		else
