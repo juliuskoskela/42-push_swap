@@ -20,7 +20,7 @@ CFLAGS = -g -Wall -Wextra -Werror
 CPPFLAGS = -I . -I inc -I ../../core -I ../common
 LDFLAGS = -L $(CORE_DIR) -L $(COMMON_DIR)
 DEPFLAGS = -MT $@ -MMD -MP -MF $(DEP_DIR)/$*.d
-COMPILE.c = $(CC) $(DEPFLAGS) $(CFLAGS) $(CPPFLAGS) $(LDFLAGS) -c
+COMPILE.c = $(CC) $(DEPFLAGS) $(CFLAGS) $(CPPFLAGS) -c
 
 .PHONY: all re clean fclean
 
