@@ -6,6 +6,7 @@ static int	ps_get_cmd(char **dst)
 	int		ret;
 	int		i;
 
+	mzero(buf, sizeof(char) * 5);
 	i = 0;
 	while (i < 4)
 	{
