@@ -32,12 +32,12 @@ static int	ps_get_cmd(char **dst)
 
 static int	ps_check_cmd(char *cmd)
 {
-	char	*cmd_id [] = {
+	static char	*cmd_id [] = {
 		"sa", "sb", "ss",
 		"pa", "pb", "ra",
 		"rb", "rr", "rra",
 		"rrb", "rrr"};
-	t_size	i;
+	t_size		i;
 
 	i = 0;
 	while (i < 11)
@@ -76,18 +76,15 @@ static void	ps_cmd_loop(t_stacks *ab, int verb)
 static void	ps_calc_commands(t_parray cmds)
 {
 	int		cc[11];
-	int		index;
 	char	*cur;
 	t_size	i;
 
 	mzero(&cc[0], sizeof(int) * 11);
-	index = 0;
 	i = 0;
 	while (i < cmds.len)
 	{
 		cur = parr_get(&cmds, i);
-		index = ps_check_cmd(cur);
-		cc[index] += 1;
+		cc[ps_check_cmd(cur)] += 1;
 		i++;
 	}
 	print("sa = %3.1f %%\n", 100 * ((double) cc[SA] / (double)cmds.len));
@@ -109,7 +106,7 @@ int	main(int argc, char **argv)
 	t_stacks	ab;
 
 	verb = 0;
-	if (argc < 2)
+	if (argc < 2 || (argc == 2 && s_cmp(argv[1], "-v") == 0))
 		exit(-1);
 	if (s_cmp(argv[1], "-v") == 0)
 		verb = 1;
