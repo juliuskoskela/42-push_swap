@@ -38,7 +38,7 @@ static int ps_parse_args(t_array *raw, char *args)
 		if (is_digit(args[i]) || args[i] == '-' || args[i] == '+')
 		{
 			nbr = s_toi(&args[i]);
-			if (nbr > 2147483647 || nbr < -2147483647)
+			if (nbr > 2147483647 || nbr < -2147483648)
 			{
 				print("Error\n");
 				exit(-1);
