@@ -25,8 +25,6 @@ static int	ps_get_cmd(char **dst)
 	}
 	buf[i] = '\0';
 	*dst = s_dup(buf);
-	if (*dst == NULL)
-		return (-1);
 	return (1);
 }
 

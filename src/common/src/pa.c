@@ -1,6 +1,6 @@
 #include "../inc/common.h"
 
-void		pa(t_stacks *ab)
+void	pa(t_stacks *ab)
 {
 	int	tmp;
 

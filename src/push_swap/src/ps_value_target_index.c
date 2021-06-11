@@ -1,4 +1,4 @@
-# include "../inc/push_swap.h"
+#include "../inc/push_swap.h"
 
 // Calculate the desired position for the value in stack a
 // Stack a rotations are not reversed at this point so we

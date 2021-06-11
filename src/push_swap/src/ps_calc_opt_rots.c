@@ -1,4 +1,4 @@
-# include "../inc/push_swap.h"
+#include "../inc/push_swap.h"
 
 static int	ps_calc_merged_dist(t_rots rots)
 {
@@ -6,7 +6,8 @@ static int	ps_calc_merged_dist(t_rots rots)
 	return (math_abs(rots.a) + math_abs(rots.b));
 }
 
-static void ps_rot_cases(t_rots *cases, t_stacks *ab, int dst_index, int src_index)
+static void	ps_rot_cases(t_rots *cases,
+	t_stacks *ab, int dst_index, int src_index)
 {
 	cases[0].a = ab->a.len - dst_index;
 	cases[0].b = ab->b.len - src_index;

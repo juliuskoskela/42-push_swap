@@ -19,6 +19,7 @@ SRC = $(addprefix src/, \
 	ps_stack_zero_index.c \
 	ps_calc_opt_rots.c \
 	ps_merge_rots.c \
+	ps_rot_sorted_substack.c \
 )
 
 OBJ = $(subst $(SRC_DIR), $(OBJ_DIR), $(SRC:.c=.o))

@@ -1,6 +1,6 @@
 #include "../inc/common.h"
 
-void		pb(t_stacks *ab)
+void	pb(t_stacks *ab)
 {
 	int	tmp;
 

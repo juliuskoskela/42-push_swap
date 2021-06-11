@@ -1,4 +1,4 @@
-# include "../inc/push_swap.h"
+#include "../inc/push_swap.h"
 
 // Get the smallest value position in stack a.
 

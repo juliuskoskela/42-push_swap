@@ -1,6 +1,6 @@
 #include "../inc/common.h"
 
-void		sb(t_stacks *ab)
+void	sb(t_stacks *ab)
 {
 	int	*top;
 	int	*sec;

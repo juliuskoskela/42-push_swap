@@ -3,7 +3,7 @@
 # include "../../core/inc/core.h"
 # include "../common/inc/common.h"
 
-typedef struct	s_rots
+typedef struct s_rots
 {
 	int			a;
 	int			b;
@@ -20,5 +20,6 @@ t_rots		ps_merge_rots(t_rots rots);
 int			ps_stack_zero_index(t_stacks *ab);
 void		ps_merge(t_stacks *ab);
 void		ps_sort(t_stacks *ab);
+void		ps_rot_sorted_substack(t_stacks *ab);
 
 #endif

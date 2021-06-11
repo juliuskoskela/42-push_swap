@@ -1,4 +1,4 @@
-# include "../inc/push_swap.h"
+#include "../inc/push_swap.h"
 
 t_rots	ps_merge_rots(t_rots rots)
 {

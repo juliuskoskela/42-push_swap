@@ -1,4 +1,4 @@
-# include "../inc/push_swap.h"
+#include "../inc/push_swap.h"
 
 static t_size	ps_choose_val_in_b(t_stacks *ab)
 {

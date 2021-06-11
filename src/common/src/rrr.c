@@ -1,6 +1,6 @@
 #include "../inc/common.h"
 
-void		rrr(t_stacks *ab)
+void	rrr(t_stacks *ab)
 {
 	arr_rotate(&ab->a, 1);
 	arr_rotate(&ab->b, 1);

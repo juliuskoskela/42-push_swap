@@ -1,11 +1,10 @@
-
 #include "../inc/common.h"
 
 static int	ps_find_position(t_array a, int n)
 {
-	int	*numptr;
-	t_size		pos;
-	t_size		i;
+	int		*numptr;
+	t_size	pos;
+	t_size	i;
 
 	i = 0;
 	pos = 0;

@@ -1,6 +1,6 @@
 #include "../inc/common.h"
 
-void		ss(t_stacks *ab)
+void	ss(t_stacks *ab)
 {
 	int	*a_top;
 	int	*a_sec;

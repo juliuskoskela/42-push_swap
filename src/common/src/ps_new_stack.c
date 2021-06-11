@@ -25,7 +25,7 @@ static void	ps_check_duplicate(t_array *raw, int nbr)
 	}
 }
 
-static int ps_parse_args(t_array *raw, char *args)
+static int	ps_parse_args(t_array *raw, char *args)
 {
 	t_int64	nbr;
 	t_size	i;
