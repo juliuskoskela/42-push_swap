@@ -2,7 +2,7 @@
 #include "../core/inc/types.h"
 #include <time.h>
 
-t_ssize	print_int64(void *data, t_size i)
+static t_ssize	print_int64(void *data, t_size i)
 {
 	int	*ptr;
 
@@ -11,7 +11,7 @@ t_ssize	print_int64(void *data, t_size i)
 	return (i);
 }
 
-void	shuffle(t_array *arr, int n)
+static void	shuffle(t_array *arr, int n)
 {
 	t_int64	i;
 	t_int64	j;
