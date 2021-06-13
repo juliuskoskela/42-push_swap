@@ -2,10 +2,14 @@ BUILD_DIR	= build
 PUSH_SWAP = src/push_swap
 CHECKER = src/checker
 
-all: $(BUILD_DIR)
+all: push_swap checker
+
+push_swap: $(BUILD_DIR)
 	$(MAKE) -C $(PUSH_SWAP)
-	$(MAKE) -C $(CHECKER)
 	cp $(PUSH_SWAP)/push_swap build
+
+checker: $(BUILD_DIR)
+	$(MAKE) -C $(CHECKER)
 	cp $(CHECKER)/checker build
 
 $(BUILD_DIR): ; @mkdir -p $@
