@@ -1,6 +1,7 @@
 BUILD_DIR	= build
 PUSH_SWAP = src/push_swap
 CHECKER = src/checker
+NAME = $(CHECKER) $(PUSH_SWAP)
 
 all: push_swap checker
 
