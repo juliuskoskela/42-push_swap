@@ -4,6 +4,7 @@ A Hive Helsinki (42 school) project to sort a stack of integers using specialize
 
 ## Commands
 
+```
 sa    // Swap first two values in stack a
 sb    // Swap first two values in stack b
 ss    // Swap first two values in both stacks
@@ -15,6 +16,7 @@ rr    // Rotate both stacks
 rra   // Reverse rotate a
 rrb   // Reverse rotate b
 rrr   // Reverse rotate both stacks.
+```
 
 ## Algorithm Description
 
